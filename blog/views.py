@@ -1,6 +1,8 @@
 import markdown
 from django.shortcuts import render, get_object_or_404
 from .models import *
+from comments.forms import CommentForm
+
 
 
 def index(request):
@@ -16,8 +18,20 @@ def detail(request, pk):
                                       'markdown.extensions.extra',
                                       'markdown.extensions.codehilite',
                                       'markdown.extensions.toc',
-                                  ])
-    return render(request, 'blog/detail.html', context={'post': post})
+    
+                              ])
+    # 创建表单实例
+    form = CommentForm()
+    # 获取这篇文章的所有评论
+    comment_list = post.comment_set.all()
+    
+    # 将文章, 表单, 以及文章下的评论列表作为模板变量传递给  detail.html 模版
+    context = {
+        'post': post,
+        'form': form,
+        'comment_list': comment_list
+    }
+    return render(request, 'blog/detail.html', context=context)
 
 
 # 归档

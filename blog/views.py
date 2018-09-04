@@ -24,12 +24,15 @@ def detail(request, pk):
     form = CommentForm()
     # 获取这篇文章的所有评论
     comment_list = post.comment_set.all()
+    # 获取这篇文章评论的数量
+    comment_count = post.comment_set.all().count()
     
     # 将文章, 表单, 以及文章下的评论列表作为模板变量传递给  detail.html 模版
     context = {
         'post': post,
         'form': form,
-        'comment_list': comment_list
+        'comment_list': comment_list,
+        'comment_count': comment_count,
     }
     return render(request, 'blog/detail.html', context=context)
 

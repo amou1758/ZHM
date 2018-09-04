@@ -55,3 +55,6 @@ class Post(models.Model):
         :return:
         """
         return reverse('blog:detail', kwargs={'pk': self.pk})
+    
+    class Meta:
+        ordering = ['-created_time', 'title']

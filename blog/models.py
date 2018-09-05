@@ -83,3 +83,7 @@ class Post(models.Model):
     
     class Meta:
         ordering = ['-created_time', 'title']
+        
+
+
+    

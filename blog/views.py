@@ -7,6 +7,7 @@ from .models import *
 from comments.forms import CommentForm
 from django.views.generic import ListView, DetailView
 from django.core.paginator import Paginator
+from django.db.models import Q
 
 # # 该函数已被 IndexView 类视图取代
 # def index(request):
@@ -313,4 +314,18 @@ class TagView(ListView):
         tag = get_object_or_404(Tag, pk=self.kwargs.get('pk'))
         return super(TagView, self).get_queryset().filter(tags=tag)
 
+
+
+
+def search(request):
+    q = request.GET.get('q')
+    error_msg = ''
+
+    if not q:
+        error_msg = "请输入关键词"
+        return render(request, 'blog/index.html', {'error_msg': error_msg})
+
+    post_list = Post.objects.filter(Q(title__icontains=q) | Q(body__icontains=q))
+    return render(request, 'blog/index.html', {'error_msg': error_msg,
+                                               'post_list': post_list})
 

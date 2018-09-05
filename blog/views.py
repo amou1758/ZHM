@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404
 from .models import *
 from comments.forms import CommentForm
 from django.views.generic import ListView, DetailView
-
+from django.core.paginator import Paginator
 
 # # 该函数已被 IndexView 类视图取代
 # def index(request):
@@ -65,8 +65,10 @@ class IndexView(ListView):
     model = Post
     template_name = 'blog/index.html'
     context_object_name = 'post_list'
-    
-    
+    # 每页显示的文章数量
+    paginate_by = 1
+
+
 # 分类文章列表  ListView 类视图
 class CategoryView(ListView):
     model = Post
@@ -84,11 +86,11 @@ class ArchivesView(ListView):
     template_name = 'blog/index.html'
     context_object_name = 'post_list'
     
+    
     def get_queryset(self):
         year = self.kwargs.get('year')
         month = self.kwargs.get('month')
         return super(ArchivesView, self).get_queryset().filter(created_time__year=year, created_time__month=month)
-    
     
 
 class PostDetailView(DetailView):
